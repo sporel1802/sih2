@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Stress Assessment Chatbot</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #2575fc;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+        
+        .tagline {
+            color: #6a11cb;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .quote {
+            font-style: italic;
+            color: #555;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 5px solid #6a11cb;
+            border-radius: 5px;
+            margin: 15px 0;
+        }
+        
+        .main-content {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .chatbot-container {
+            flex: 2;
+            min-width: 300px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+        }
+        
+        .chat-header {
+            background: #6a11cb;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            background: #f8f9fa;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 12px 15px;
+            border-radius: 10px;
+            line-height: 1.5;
+        }
+        
+        .bot-message {
+            background: white;
+            border: 1px solid #ddd;
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+        }
+        
+        .user-message {
+            background: #2575fc;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+        }
+        
+        .chat-input {
+            display: flex;
+            padding: 15px;
+            background: white;
+            border-top: 1px solid #eee;
+        }
+        
+        .chat-input input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            outline: none;
+            font-size: 1rem;
+        }
+        
+        .chat-input button {
+            background: #6a11cb;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .chat-input button:hover {
+            background: #2575fc;
+        }
+        
+        .upload-section {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .upload-header {
+            color: #6a11cb;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+        
+        .upload-area {
+            border: 2px dashed #6a11cb;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .upload-area:hover {
+            background: #f8f9fa;
+        }
+        
+        .upload-icon {
+            font-size: 3rem;
+            color: #2575fc;
+            margin-bottom: 15px;
+        }
+        
+        .recommendations {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            margin-top: 20px;
+        }
+        
+        .recommendations h2 {
+            color: #6a11cb;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .recommendation-cards {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            width: 250px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card i {
+            font-size: 2.5rem;
+            color: #2575fc;
+            margin-bottom: 15px;
+        }
+        
+        .card h3 {
+            color: #6a11cb;
+            margin-bottom: 10px;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #eee;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+            width: 0%;
+            transition: width 0.5s;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: white;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Student Stress Assessment Tool</h1>
+            <p class="tagline">Understand your stress levels and get personalized recommendations</p>
+            <div class="quote">
+                <i class="fas fa-quote-left"></i> 
+                "The greatest weapon against stress is our ability to choose one thought over another." - William James
+                <i class="fas fa-quote-right"></i>
+            </div>
+        </header>
+        
+        <div class="main-content">
+            <div class="chatbot-container">
+                <div class="chat-header">
+                    <i class="fas fa-robot"></i> Stress Assessment Chatbot
+                </div>
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message bot-message">
+                        Hi there! I'm here to help you assess your stress levels and provide personalized recommendations. Let's start with a few questions.
+                    </div>
+                    <div class="message bot-message">
+                        What year are you in? (Freshman, Sophomore, Junior, Senior)
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="user-input" placeholder="Type your answer here...">
+                    <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+            
+            <div class="upload-section">
+                <h2 class="upload-header"><i class="fas fa-video"></i> Video Upload</h2>
+                <p>If you'd like, you can upload a short video describing how you're feeling. This is optional but can help us provide better recommendations.</p>
+                
+                <div class="upload-area" id="upload-area">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <p>Click or drag a video file to upload</p>
+                    <p class="small">(Max file size: 50MB)</p>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress" id="upload-progress"></div>
+                </div>
+                
+                <div class="message bot-message">
+                    <i class="fas fa-info-circle"></i> Your video is encrypted and secure. We respect your privacy.
+                </div>
+            </div>
+        </div>
+        
+        <div class="recommendations">
+            <h2><i class="fas fa-sliders-h"></i> Recommendations will appear here</h2>
+            <p class="tagline">Complete the assessment to get personalized stress management recommendations</p>
+            
+            <div class="recommendation-cards">
+                <div class="card">
+                    <i class="fas fa-gamepad"></i>
+                    <h3>Interactive Activities</h3>
+                    <p>Engaging games to reduce stress</p>
+                </div>
+                
+                <div class="card">
+                    <i class="fas fa-film"></i>
+                    <h3>Calming Media</h3>
+                    <p>Videos and music to relax</p>
+                </div>
+                
+                <div class="card">
+                    <i class="fas fa-user-md"></i>
+                    <h3>Professional Support</h3>
+                    <p>Resources when you need them</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2023 Student Stress Assessment Tool | Privacy Policy | Terms of Service</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatMessages = document.getElementById('chat-messages');
+            const userInput = document.getElementById('user-input');
+            const sendBtn = document.getElementById('send-btn');
+            const uploadArea = document.getElementById('upload-area');
+            const uploadProgress = document.getElementById('upload-progress');
+            
+            let currentQuestion = 0;
+            const questions = [
+                "What year are you in? (Freshman, Sophomore, Junior, Senior)",
+                "Do you often feel burdened by exams or projects? (Often/Sometimes/Never)",
+                "Do you feel anxious about your studies or future career? (Yes/Somewhat/No)",
+                "Do you have difficulty concentrating on your studies? (Yes/Somewhat/No)",
+                "How is your sleep quality and energy level? (Good/Fair/Poor)",
+                "Do you have a support system (friends, family, mentors) you can talk to? (Yes/Somewhat/No)",
+                "What are your main coping strategies when you feel stressed?",
+                "On a scale of 1-5, how would you rate your overall stress level? (1 being low, 5 being high)"
+            ];
+            
+            // Send message when button is clicked
+            sendBtn.addEventListener('click', handleUserResponse);
+            
+            // Send message when Enter is pressed
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleUserResponse();
+                }
+            });
+            
+            function handleUserResponse() {
+                const userText = userInput.value.trim();
+                if (userText === '') return;
+                
+                // Add user message to chat
+                addMessage(userText, 'user');
+                
+                // Clear input
+                userInput.value = '';
+                
+                // Process response and show next question
+                setTimeout(() => {
+                    currentQuestion++;
+                    
+                    if (currentQuestion < questions.length) {
+                        addMessage(questions[currentQuestion], 'bot');
+                    } else {
+                        // Assessment complete
+                        addMessage("Thank you for completing the assessment! Analyzing your responses...", 'bot');
+                        
+                        // Show recommendations after a delay
+                        setTimeout(showRecommendations, 2000);
+                    }
+                }, 1000);
+            }
+            
+            function addMessage(text, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+                messageDiv.textContent = text;
+                
+                chatMessages.appendChild(messageDiv);
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+            
+            function showRecommendations() {
+                const recommendationsSection = document.querySelector('.recommendations');
+                recommendationsSection.innerHTML = `
+                    <h2><i class="fas fa-sliders-h"></i> Your Personalized Recommendations</h2>
+                    <p class="tagline">Based on your assessment, here are some resources to help manage your stress</p>
+                    
+                    <div class="recommendation-cards">
+                        <div class="card">
+                            <i class="fas fa-gamepad"></i>
+                            <h3>Mindful Gaming</h3>
+                            <p>Try these relaxing games: "Calm", "Prune", "Monument Valley"</p>
+                        </div>
+                        
+                        <div class="card">
+                            <i class="fas fa-film"></i>
+                            <h3>Guided Meditation</h3>
+                            <p>Watch: "10-Minute Meditation for Students" on YouTube</p>
+                        </div>
+                        
+                        <div class="card">
+                            <i class="fas fa-user-md"></i>
+                            <h3>Counseling Resources</h3>
+                            <p>Contact student health services for a consultation</p>
+                        </div>
+                        
+                        <div class="card">
+                            <i class="fas fa-running"></i>
+                            <h3>Physical Activity</h3>
+                            <p>Try a 15-minute walk daily to reduce stress</p>
+                        </div>
+                    </div>
+                    
+                    <div class="message bot-message" style="margin-top: 20px;">
+                        <i class="fas fa-lightbulb"></i> Remember to take breaks and practice self-care. Your mental health is important!
+                    </div>
+                `;
+            }
+            
+            // Upload area functionality
+            uploadArea.addEventListener('click', function() {
+                simulateUpload();
+            });
+            
+            function simulateUpload() {
+                uploadArea.innerHTML = `
+                    <div class="upload-icon">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                    <p>Uploading...</p>
+                `;
+                
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 5;
+                    uploadProgress.style.width = `${progress}%`;
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            uploadArea.innerHTML = `
+                                <div class="upload-icon">
+                                    <i class="fas fa-check-circle" style="color: #4CAF50;"></i>
+                                </div>
+                                <p>Upload Complete!</p>
+                                <p class="small">Thank you for your submission</p>
+                            `;
+                            
+                            addMessage("I've received your video and will use it to better understand your situation.", 'bot');
+                        }, 500);
+                    }
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>
